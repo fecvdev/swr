@@ -73,7 +73,7 @@ const use =
       throw promise
     }
   })
-
+//#region
 const WITH_DEDUPE = { dedupe: true }
 
 type DefinitelyTruthy<T> = false extends T
@@ -87,6 +87,32 @@ type DefinitelyTruthy<T> = false extends T
   : undefined extends T
   ? never
   : T
+
+export const SWRConfig = OBJECT.defineProperty(ConfigProvider, 'defaultValue', {
+  value: defaultConfig
+}) as typeof ConfigProvider & {
+  defaultValue: FullConfiguration
+}
+
+export { unstable_serialize } from './serialize'
+//#endregion
+
+/*
+((...args: any[]) => {
+  const [key] = serialize(key_)
+  const [, , , PRELOAD] = SWRGlobalState.get(cache) as GlobalState
+
+  if (key.startsWith(INFINITE_PREFIX)) {
+    return fetcher_(...args)
+  }
+
+  const req = PRELOAD[key]
+  if (isUndefined(req)) return fetcher_(...args)
+  delete PRELOAD[key]
+  return req
+})
+
+*/
 
 export const useSWRHandler = <Data = any, Error = any>(
   _key: Key,
@@ -272,6 +298,7 @@ export const useSWRHandler = <Data = any, Error = any>(
       ? laggyDataRef.current
       : cachedData
     : data
+  // data
 
   // - Suspense mode and there's stale data for the initial render.
   // - Not suspense mode and there is no fallback data and `revalidateIfStale` is enabled.
@@ -531,6 +558,7 @@ export const useSWRHandler = <Data = any, Error = any>(
 
       return true
     },
+    //#region
     // `setState` is immutable, and `eventsCallback`, `fnArg`, and
     // `keyValidating` are depending on `key`, so we can exclude them from
     // the deps array.
@@ -542,6 +570,7 @@ export const useSWRHandler = <Data = any, Error = any>(
     // So we omit the values from the deps array
     // even though it might cause unexpected behaviors.
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    //#endregion
     [key, cache]
   )
 
@@ -737,14 +766,6 @@ export const useSWRHandler = <Data = any, Error = any>(
     }
   } as SWRResponse<Data, Error>
 }
-
-export const SWRConfig = OBJECT.defineProperty(ConfigProvider, 'defaultValue', {
-  value: defaultConfig
-}) as typeof ConfigProvider & {
-  defaultValue: FullConfiguration
-}
-
-export { unstable_serialize } from './serialize'
 
 /**
  * A hook to fetch data.

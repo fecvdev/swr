@@ -1,13 +1,13 @@
 import type * as revalidateEvents from './events'
 
 export type GlobalState = [
-  Record<string, RevalidateCallback[]>, // EVENT_REVALIDATORS
-  Record<string, [number, number]>, // MUTATION: [ts, end_ts]
-  Record<string, [any, number]>, // FETCH: [data, ts]
-  Record<string, FetcherResponse<any>>, // PRELOAD
-  ScopedMutator, // Mutator
-  (key: string, value: any, prev: any) => void, // Setter
-  (key: string, callback: (current: any, prev: any) => void) => () => void // Subscriber
+  Record<string, RevalidateCallback[]>, // EVENT_REVALIDATORS 0
+  Record<string, [number, number]>, // MUTATION: [ts, end_ts] 1
+  Record<string, [any, number]>, // FETCH: [data, ts] 2
+  Record<string, FetcherResponse<any>>, // PRELOAD 3
+  ScopedMutator, // Mutator 4
+  (key: string, value: any, prev: any) => void, // Setter 5
+  (key: string, callback: (current: any, prev: any) => void) => () => void // Subscriber 6
 ]
 export type FetcherResponse<Data = unknown> = Data | Promise<Data>
 export type BareFetcher<Data = unknown> = (
@@ -213,6 +213,12 @@ export type FullConfiguration<
   Fn extends Fetcher = BareFetcher
 > = InternalConfiguration & PublicConfiguration<Data, Error, Fn>
 
+export type SWRConfiguration<
+  Data = any,
+  Error = any,
+  Fn extends BareFetcher<any> = BareFetcher<any>
+> = Partial<PublicConfiguration<Data, Error, Fn>>
+
 export type ProviderConfiguration = {
   initFocus: (callback: () => void) => (() => void) | void
   initReconnect: (callback: () => void) => (() => void) | void
@@ -398,12 +404,6 @@ export type KeyedMutator<Data> = <MutationData = Data>(
   data?: Data | Promise<Data | undefined> | MutatorCallback<Data>,
   opts?: boolean | MutatorOptions<Data, MutationData>
 ) => Promise<Data | MutationData | undefined>
-
-export type SWRConfiguration<
-  Data = any,
-  Error = any,
-  Fn extends BareFetcher<any> = BareFetcher<any>
-> = Partial<PublicConfiguration<Data, Error, Fn>>
 
 type SWROptions<Data> = SWRConfiguration<Data, Error, Fetcher<Data, Key>>
 export interface SWRResponse<Data = any, Error = any, Config = any> {

@@ -72,13 +72,13 @@ export const initCache = <Data = any>(
       if (!SWRGlobalState.has(provider)) {
         // Update the state if it's new, or if the provider has been extended.
         SWRGlobalState.set(provider, [
-          EVENT_REVALIDATORS,
-          {},
-          {},
-          {},
-          mutate,
-          setter,
-          subscribe
+          EVENT_REVALIDATORS, // EVENT_REVALIDATORS 0
+          {}, // MUTATION: [ts, end_ts] 1
+          {}, // FETCH: [data, ts] 2
+          {}, // PRELOAD 3
+          mutate, // Mutator 4
+          setter, // Setter 5
+          subscribe // Subscriber 6
         ])
         if (!IS_SERVER) {
           // When listening to the native events for auto revalidations,

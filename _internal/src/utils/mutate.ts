@@ -114,6 +114,7 @@ export async function internalMutate<Data>(
     }
 
     // If there is no new data provided, revalidate the key with current state.
+    // const [cache, _key, _data, _opts] = args
     if (args.length < 3) {
       // Revalidate and broadcast state.
       return startRevalidate()
