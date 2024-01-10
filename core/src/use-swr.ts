@@ -43,6 +43,7 @@ import type {
   ReactUsePromise
 } from 'swr/_internal'
 
+//#region
 const use =
   ReactExports.use ||
   (<T>(
@@ -73,7 +74,6 @@ const use =
       throw promise
     }
   })
-//#region
 const WITH_DEDUPE = { dedupe: true }
 
 type DefinitelyTruthy<T> = false extends T
@@ -96,23 +96,6 @@ export const SWRConfig = OBJECT.defineProperty(ConfigProvider, 'defaultValue', {
 
 export { unstable_serialize } from './serialize'
 //#endregion
-
-/*
-((...args: any[]) => {
-  const [key] = serialize(key_)
-  const [, , , PRELOAD] = SWRGlobalState.get(cache) as GlobalState
-
-  if (key.startsWith(INFINITE_PREFIX)) {
-    return fetcher_(...args)
-  }
-
-  const req = PRELOAD[key]
-  if (isUndefined(req)) return fetcher_(...args)
-  delete PRELOAD[key]
-  return req
-})
-
-*/
 
 export const useSWRHandler = <Data = any, Error = any>(
   _key: Key,
