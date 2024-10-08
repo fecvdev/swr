@@ -39,14 +39,15 @@ export const preload = <
   return req
 }
 
-export const middleware: Middleware =
-  useSWRNext => (key_, fetcher_, config) => {
+export const middleware: Middleware = 
+useSWRNext => {
+  return (key_, fetcher_, config) => {
     // fetcher might be a sync function, so this should not be an async function
     const fetcher =
       fetcher_ &&
       ((...args: any[]) => {
         const [key] = serialize(key_)
-        const [, , , PRELOAD] = SWRGlobalState.get(cache) as GlobalState
+        const [ , , , PRELOAD] = SWRGlobalState.get(cache) as GlobalState
 
         if (key.startsWith(INFINITE_PREFIX)) {
           // we want the infinite fetcher to be called.
@@ -61,3 +62,4 @@ export const middleware: Middleware =
       })
     return useSWRNext(key_, fetcher, config)
   }
+}

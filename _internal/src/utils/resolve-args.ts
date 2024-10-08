@@ -20,6 +20,7 @@ export const withArgs = <SWRType>(hook: any) => {
     let next = hook
     const { use } = config
     const middleware = (use || []).concat(BUILT_IN_MIDDLEWARE)
+    // 从后往前包，从前往后触发
     for (let i = middleware.length; i--; ) {
       next = middleware[i](next)
     }
